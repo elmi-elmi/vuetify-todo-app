@@ -1,6 +1,14 @@
 <template>
   <div class="home">
-
+    <v-text-field
+        v-model="newTask"
+        class="pa-3"
+        outlined
+        label="Add Task"
+        append-icon="mdi-plus"
+        clearable
+        @click:append="addTask"
+    ></v-text-field>
 
     <v-list
         flat
@@ -21,11 +29,12 @@
 
             <v-list-item-content>
               <v-list-item-title
-              :class="{'text-decoration-line-through':task.done}"
-              >{{ task.todo }}</v-list-item-title>
+                  :class="{'text-decoration-line-through':task.done}"
+              >{{ task.todo }}
+              </v-list-item-title>
             </v-list-item-content>
             <v-list-item-action
-            @click.stop="deleteTask(task.id)"
+                @click.stop="deleteTask(task.id)"
             >
               <v-btn icon>
                 <v-icon color="grey lighten-1">mdi-delete</v-icon>
@@ -45,6 +54,7 @@ export default {
   name: 'ViewTodo',
   data() {
     return {
+      newTask:'',
       tasks: [
         {id: 1, todo: 'Wake up', done: false},
         {id: 2, todo: 'Do nothing', done: true},
@@ -57,8 +67,17 @@ export default {
     doneTask(e) {
       e.done = !e.done
     },
-    deleteTask(id){
-      this.tasks=  this.tasks.filter(t=>t.id !== id)
+    deleteTask(id) {
+      this.tasks = this.tasks.filter(t => t.id !== id)
+    },
+    addTask(e) {
+      if(this.newTask.length === 0) return
+      this.tasks.unshift({
+        id: Date.now(),
+        todo: this.newTask,
+        done: false
+      })
+      this.newTask = ''
     }
 
   }
