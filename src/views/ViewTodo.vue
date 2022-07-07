@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <v-text-field
-        v-model="newTask"
+        v-model="newTaskTitle"
         class="pa-3"
         outlined
         label="Add Task"
@@ -11,6 +11,7 @@
     ></v-text-field>
 
     <v-list
+        v-if="tasks.length"
         flat
         class="pt-0"
     >
@@ -45,6 +46,23 @@
         <v-divider></v-divider>
       </div>
     </v-list>
+    <div
+        v-else
+        class="no-tasks"
+    >
+      <v-icon
+          size="100"
+          color="primary"
+      >
+        mdi-check
+      </v-icon>
+      <div
+      class="text-h5"
+      >
+        No Task
+      </div>
+
+    </div>
   </div>
 </template>
 
@@ -54,7 +72,7 @@ export default {
   name: 'ViewTodo',
   data() {
     return {
-      newTask:'',
+      newTaskTitle: '',
       tasks: [
         {id: 1, todo: 'Wake up', done: false},
         {id: 2, todo: 'Do nothing', done: true},
@@ -71,16 +89,27 @@ export default {
       this.tasks = this.tasks.filter(t => t.id !== id)
     },
     addTask(e) {
-      if(this.newTask.length === 0) return
+      if (this.newTaskTitle.length === 0) return
       this.tasks.unshift({
         id: Date.now(),
-        todo: this.newTask,
+        todo: this.newTaskTitle,
         done: false
       })
-      this.newTask = ''
+      this.newTaskTitle = ''
     }
 
   }
 
 }
 </script>
+
+<style lang="sass">
+  .no-tasks
+    position: absolute
+    top: 50%
+    left: 50%
+    transform:translate(-50%,-50%)
+    opacity: 50%
+    text-align: center
+
+</style>
